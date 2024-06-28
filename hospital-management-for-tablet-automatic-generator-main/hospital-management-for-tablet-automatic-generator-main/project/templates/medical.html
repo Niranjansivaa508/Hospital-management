@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pharmacy</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        #thermometer {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        #diseases {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #medicineSelection {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #medicines {
+            margin-top: 20px;
+        }
+
+        @media print {
+            body {
+                font-family: Arial, sans-serif;
+            }
+            header {
+                display: none; /* Hide the header when printing */
+            }
+            #thermometer, #diseases, #medicineSelection {
+                margin: 0;
+                border: none;
+                box-shadow: none;
+                padding: 0;
+                background: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pharmacy</h1>
+    </header>
+
+    <div id="thermometer">
+        <h2>Calculate Body Temperature</h2>
+        <label for="temperature">Enter Temperature (°C):</label>
+        <input type="text" id="temperature">
+        <button onclick="calculateTemperature()">Calculate</button>
+    </div>
+
+    <div id="diseases">
+        <h2>Common Diseases and Symptoms</h2>
+        <ul>
+            <li><strong>Fever:</strong> Symptoms include high temperature, headache, and body aches.</li>
+            <li><strong>Cough and Cold:</strong> Symptoms include a sore throat, runny nose, and cough.</li>
+            <li><strong>Headaches:</strong> Symptoms include head pain, sleepiness, and drowsiness.</li>
+            <li><strong>Stomach Pain:</strong> Symptoms include swelling and tenderness to the touch.</li>
+            <li><strong>Diarrhea:</strong> Symptoms include loose or watery stools.</li>
+            <!-- Add more disease information here -->
+        </ul>
+    </div>
+
+    <div id="medicineSelection">
+        <h2>Select Medicines</h2>
+        <label for="diseaseSelect">Select Disease:</label>
+        <select id="diseaseSelect">
+            <option value="fever">Fever</option>
+            <option value="cough">Cough and Cold</option>
+            <option value="headaches">Headaches</option>
+            <option value="stomachPain">Stomach Pain</option>
+            <option value="diarrhea">Diarrhea</option>
+            <!-- Add more disease options here -->
+        </select>
+        <button onclick="getMedicines()">Get Medicines</button>
+        <div id="medicines"></div>
+    </div>
+
+    <button onclick="printPage()">Print</button>
+
+
+    <script>
+        function calculateTemperature() {
+            const temperatureInput = document.getElementById("temperature");
+            const temperature = parseFloat(temperatureInput.value);
+
+            if (!isNaN(temperature)) {
+                let result = "";
+
+                if (temperature < 37.0) {
+                    result = "Normal Body Temperature";
+                } else if (temperature >= 37.0 && temperature < 38.0) {
+                    result = "Low-Grade Fever";
+                } else {
+                    result = "High Fever";
+                }
+
+                const temperatureResult = `Temperature: ${temperature}°C - ${result}`;
+                alert(temperatureResult);
+            } else {
+                alert("Please enter a valid temperature.");
+            }
+        }
+
+        function getMedicines() {
+            const diseaseSelect = document.getElementById("diseaseSelect");
+            const selectedDisease = diseaseSelect.value;
+            const medicinesDiv = document.getElementById("medicines");
+
+            // Display medicines based on the selected disease
+            switch (selectedDisease) {
+                case "fever":
+                    medicinesDiv.innerHTML = "Medicines for Fever: Acetaminophen, Ibuprofen.";
+                    break;
+                case "cough":
+                    medicinesDiv.innerHTML = "Medicines for Cough and Cold: Dextromethorphan, Guaifenesin.";
+                    break;
+                case "headaches":
+                    medicinesDiv.innerHTML = "Medicines for Headaches: Acetaminophen, Naproxen.";
+                    break;
+                case "stomachPain":
+                    medicinesDiv.innerHTML = "Medicines for Stomach Pain: Antacids, Acetaminophen.";
+                    break;
+                case "diarrhea":
+                    medicinesDiv.innerHTML = "Medicines for Diarrhea: Loperamide, Oral Rehydration Solution";
+                    break;
+                default:
+                    medicinesDiv.innerHTML = "No medicines available for the selected disease.";
+            }
+
+            const printWindow = window.open('', 'Print Medicines', 'width=1200,height=630');
+            printWindow.document.open();
+            printWindow.document.write(`<html><head><title>Medicine List</title></head><body>${medicines}</body></html>`);
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.close();
+        }
+        function printPage() {
+            // Hide the print button to prevent it from being printed
+            const printButton = document.querySelector("button");
+            printButton.style.display = "none";
+
+            // Print the content
+            window.print();
+
+            // Restore the print button's visibility
+            printButton.style.display = "block";
+        }
+    </script>
+</body>
+</html>
